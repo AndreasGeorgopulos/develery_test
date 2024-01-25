@@ -1,0 +1,53 @@
+version: '3.8'
+
+networks:
+  symfony:
+
+services:
+  php-apache:
+    container_name: develery-test-web
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php-apache/default.conf:/etc/apache2/sites-enabled/000-default.conf
+    environment:
+      - max_execution_time=600
+    ports:
+      - "2900:80"
+    depends_on:
+      - db
+    networks:
+      - symfony
+
+  db:
+    image: mariadb:latest
+    container_name: develery-test-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=aA123456
+      - MYSQL_DATABASE=develery_db
+      - MYSQL_USER=develery_user
+      - MYSQL_PASSWORD=develery_pwd
+      - TZ=Europe/Budapest
+    ports:
+      - "2902:3306"
+    volumes:
+      - ./docker/db:/var/lib/mysql
+    networks:
+      - symfony
+
+  adminer:
+    image: adminer
+    container_name: develery-test-adminer
+    ports:
+      - "2901:8080"
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ADMINER_DESIGN: price
+      ADMINER_PLUGINS: dump-date edit-calendar enum-option enum-types sql-log struct-comments tables-filter
+    networks:
+      - symfony
