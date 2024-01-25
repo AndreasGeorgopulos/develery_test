@@ -8,4 +8,5 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/docker/db/
+/.init
+/docker
