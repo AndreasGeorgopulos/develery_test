@@ -29,13 +29,13 @@ RUN docker-php-ext-install zip
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Install NPM
+RUN apt upgrade -y
+RUN apt install npm -y --fix-missing
+
 # Install Symfony Cli
 COPY ./docker/php-apache/symfony-cli-installer /root/symfony-cli-installer
 RUN /root/symfony-cli-installer
 RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
-
-# Install NPM
-#RUN apt upgrade -y
-#RUN apt install npm -y --fix-missing
 
 RUN a2enmod rewrite
