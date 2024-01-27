@@ -37,7 +37,7 @@ class ContactMessage
 
     public function getName(): ?string
     {
-        return $this->fullname;
+        return $this->name;
     }
 
     public function setName(?string $name): static
